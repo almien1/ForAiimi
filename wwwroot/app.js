@@ -164,6 +164,7 @@ new Vue({
                 phone: "+44 0000 0000000",
                 email: "owhite@example.com" /* Note: test.com is a real domain!!! example.com is the RFC-protected one! */
             };
+            this.validateNewUserForm(); // to enable the button
         }
         if (false) {
             this.error = "This is a sample error message";

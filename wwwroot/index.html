@@ -35,9 +35,7 @@
             <div class="dropdownResult" v-for="person in previewDirectory" :key="person.id" @click="onGoSearch">
                 {{person.firstName}} {{person.lastName}}
             </div>
-            <div class="dropdownResult" v-if="!previewDirectory.length">
-                No results.
-            </div>
+            <div class="dropdownResult" v-if="!previewDirectory.length">No results.</div>
         </div>
         <div>
             <div class="searchResults">
