@@ -5,11 +5,10 @@ new Vue({
     el: '#app',
     data: {
         search: '',
-        previousSearch: '',
-        message: '',
         loading: false,
         error: null,
-        pendingSearches: false,
+        previewDirectory: [],
+        showPreview: false,
         directory: [],
         newUserFormVisible: false,
         newUserData: {},
@@ -21,37 +20,11 @@ new Vue({
             this.newUserFormVisible = !this.newUserFormVisible;
         },
         onSearchTextChanged: function () {
-            //
-            // "After a user types 2 characters, matches are suggested" (but then why have a "Go" button?)
-            //
-            // It looks like there are two levels of search, with one being a list of names, and perhaps
-            // "Go" or [Enter] copies that list to the block of cards?
-            //
-            // For now, we'll just display one set of search results pending a requirements meeting.
-            //
-            if (this.previousSearch.length < 2 && this.search.length >= 2) {
-                this.updateSearch();
-            }
-            this.previousSearch = this.search;
-        },
-        updateSearch: function () {
-            if (this.loading) {
-                // An HTTP request is already in progress - put a reminder to check again later
-                this.pendingSearches = true;
-            }
-            else if (this.search == "") {
-                // No search -> no results
-                this.directory = [];
-                this.pendingSearches = false;
-                this.error = null;
+            if (this.search.length < 2) {
+                this.showPreview = false;
+                this.previewDirectory = [];
             }
             else {
-                // Search via the REST API
-                this.loading = true;
-                this.error = null;
-                this.pendingSearches = false;
-                // In the requirements they show the search box empty but results visible - so should we 
-                // clear the search box here?  That would probably not be what the user wanted?
                 fetch(`api/People?Search=${encodeURI(this.search)}`)
                     .then(response => {
                         if (!response.ok) {
@@ -60,19 +33,26 @@ new Vue({
                         return response.json();
                     })
                     .then(data => {
-                        this.directory = data;
-                        this.loading = false;
-
-                        // In case any additional characters were typed during the http request:
-                        if (this.pendingSearches) {
-                            this.updateSearch();
-                        }
+                        this.previewDirectory = data;
+                        this.showPreview = true;
                     })
                     .catch(error => {
                         this.error = error;
-                        this.loading = false;
                     });
             }
+        },
+        onGoSearch: function () {
+            // We already had to do a search just to show the names - so we already have the data needed?
+            if (this.showPreview) {
+                this.directory = this.previewDirectory;
+                this.previewDirectory = [];
+            }
+            else {
+                this.directory = [];
+                this.previewDirectory = [];
+            }
+            this.showPreview = false;
+            this.search = "";
         },
         createNewUser: function () {
             // POST request sends the fields as JSON, but without an ID
@@ -81,29 +61,31 @@ new Vue({
                 body: JSON.stringify(this.newUserData),
                 headers: { "Content-type": "application/json; charset=UTF-8" }
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Couldn\'t create new user');
-                    }
-                    return response.json();
-                })
-                .then(
-                    // The response did contain the new user, but it's probably
-                    // more reliable to do a search for it, so that we have just
-                    // one method for downloading data:
-                    this.onNewUserCreated()
-                ).catch(error => {
-                    this.error = error;
-                });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Couldn\'t create new user');
+                }
+                return response.json();
+            })
+            .then(
+                // The response did contain the new user, but it's probably
+                // more reliable to do a search for it, so that we have just
+                // one method for downloading data:
+                this.onNewUserCreated()
+            ).catch(error => {
+                this.error = error;
+            });
         },
         onNewUserCreated: function () {
             var newUserName = this.newUserData.lastName;
+
+            // Clear the form so people don't accidentally re-use details from a previous user
             this.newUserFormVisible = false;
             this.newUserData = {};
 
-            // Search for the new user, since someone would probably want to check their new data:
+            // Display the new user (via search) to allow confirming that it was entered correctly
             this.search = newUserName;
-            this.updateSearch();
+            this.onSearchTextChanged();
         },
         phoneEntry: function () {
             // Restrict phone numbers to numbers, spaces, dashes (for american style) and the plus character (but see below):
@@ -171,7 +153,7 @@ new Vue({
         // Options to test various examples from the requirements document
         if (false) {
             this.search = "Ph";
-            this.updateSearch();
+            this.onSearchTextChanged();
         }
         if (false) {
             this.newUserFormVisible = true;

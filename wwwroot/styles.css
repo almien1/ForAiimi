@@ -18,7 +18,7 @@ body {
     margin: 3em;
 }
 .searchText, .searchTextButton {
-    border: 1px solid var(--feint-outline);
+    border: 2px solid var(--highlight-color); /* grey or magenta? does this need to change to indicate focus? */
     padding: 0.6em;
     font-size: var(--text-size);
     }
@@ -35,6 +35,19 @@ body {
     color: white;
     border-left: none;
     margin-left: 0;
+}
+.dropdownResults {
+    border-radius: 2em;
+    background-color: white;
+    color: black;
+    border: 2px solid var(--highlight-color);
+    width: 70%;
+    padding: 0.5em;
+    margin-top: 0.3em;
+}
+.dropdownResult {
+    margin: 0.5em;
+    font-size: var(--text-size);
 }
 .searchResults {
     display: flex;

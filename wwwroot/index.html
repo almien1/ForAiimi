@@ -25,11 +25,19 @@
                    class="searchText" 
                    placeholder="Search for a user..." 
                    v-model="search" 
-                   v-on:keyup.enter="updateSearch" 
+                   v-on:keyup.enter="onGoSearch" 
                    @input="onSearchTextChanged"
                    /><!-- 
                    (removing whitespace to let them touch each other)
-            --><button class="searchTextButton" @click="updateSearch">Go!</button>
+            --><button class="searchTextButton" @click="onGoSearch">Go!</button>
+        </div>
+        <div class="dropdownResults" v-if="showPreview">
+            <div class="dropdownResult" v-for="person in previewDirectory" :key="person.id" @click="onGoSearch">
+                {{person.firstName}} {{person.lastName}}
+            </div>
+            <div class="dropdownResult" v-if="!previewDirectory.length">
+                No results.
+            </div>
         </div>
         <div>
             <div class="searchResults">
