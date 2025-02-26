@@ -152,7 +152,7 @@ new Vue({
                 this.newUserValidationError = "Last name required"; // https://history.stackexchange.com/questions/54917
             }
             else if (this.validTextField(this.newUserData.email) && (!this.validEmail(this.newUserData.email))) {
-                // Note this is client-side only, so doesn't actually stop invald emails if the user ignores
+                // Note this is client-side only, so doesn't actually stop invalid emails if the user ignores
                 // or changes this code - but since the requirements doc mentions validation in the job spec
                 // for the front-end developer, that implies an expectation that it is done client-side?
                 this.newUserValid = false;
