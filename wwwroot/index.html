@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Oliver White Interview Test</title>
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgo="><!-- blank to avoid http request if we don't create an icon -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css"/>
+
+    <!-- Vue.js (without SFC, so doesn't need Vite and doesn't need cross-origin request headers)
+
+    NOTE: Download this if running on an air-gapped test system - but then it needs to be
+          configuration-controlled and updated.
+
+    This is the development version, with Vue's helpful debug statements still included.
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+</head>
+<body>
+    <div id="app">
+        <div class="errorBar" v-if="error"><span class="clearError" @click="clearError" title="Close message">&#x274c;</span> {{error}}</div>
+        <div>
+            <input type="text" 
+                   class="searchText" 
+                   placeholder="Search for a user..." 
+                   v-model="search" 
+                   v-on:keyup.enter="updateSearch" 
+                   @input="onSearchTextChanged"
+                   /><!-- 
+                   (removing whitespace to let them touch each other)
+            --><button class="searchTextButton" @click="updateSearch">Go!</button>
+        </div>
+        <div>
+            <div class="searchResults">
+                <div class="personCard" v-for="person in directory" :key="person.id">
+                    <div class="personName">{{person.firstName}} {{person.lastName}}</div>
+                    <div>{{person.jobTitle}}</div>
+                    <div>{{person.phone}}</div>
+                    <div>{{person.email}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="newPersonForm" v-if="newUserFormVisible">
+            <div class='newPersonFormFields'>
+                <input type="text" v-model="newUserData.firstName" size=40 placeholder="First name" @input="validateNewUserForm"/>
+                <input type="text" v-model="newUserData.lastName" size=40 placeholder="Last name" @input="validateNewUserForm"/>
+                <input type="text" v-model="newUserData.jobTitle" size=25 placeholder="Job title"/><!-- no validation needed -->
+                <input type="text" v-model="newUserData.phone" size=25 placeholder="Phone" @input="phoneEntry"/> <!-- input-restriction applies immediately without needing validateNewUserForm -->
+                <input type="text" v-model="newUserData.email" size=25 placeholder="Email" @input="validateNewUserForm"/>
+            </div>
+            <div class="centredButtons">
+                <button @click="createNewUser" :disabled="!newUserValid" :title="newUserValidationError">Create</button>
+            </div>
+        </div>
+        <div class="centredButtons">
+            <button class="AddPersonButton" @click="toggleNewUserForm">New user +</button><!-- Examples show this floating over the data? -->
+        </div>
+
+    </div><!-- end of Vue's div -->
+
+    <!-- Our application -->
+    <script src="app.js"></script>
+
+</body>
+</html>

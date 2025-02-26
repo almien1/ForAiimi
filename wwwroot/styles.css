@@ -1,0 +1,105 @@
+﻿/* 
+    Styles for index.css 
+*/
+:root {
+    --highlight-color:#e6235c;
+    --text-size: larger;
+    --feint-outline: grey;
+}
+body {
+    margin: 0;
+    font-family: Calibri, sans-serif; /* to match font from requirement PDF */
+    background-color: #282c34;
+    color: white;
+    font-size: var(--text-size);
+}
+#app {
+    min-height: 100vh;
+    margin: 3em;
+}
+.searchText, .searchTextButton {
+    border: 1px solid var(--feint-outline);
+    padding: 0.6em;
+    font-size: var(--text-size);
+    }
+.searchText {
+    border-radius: 5em 0 0 5em; /* large radius so that it's clamped to a half circle */
+    margin-right: 0;
+    border-right: none;
+    outline: none;
+    width: 80%;
+}
+.searchTextButton {
+    border-radius: 0 5em 5em 0;
+    background-color: var(--highlight-color);
+    color: white;
+    border-left: none;
+    margin-left: 0;
+}
+.searchResults {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.personCard {
+    border: 2px solid white;
+    margin-right: 0.8em;
+    border-radius: 1em;
+    padding: 1em 2em 0.8em 2em; /* top, right, bottom, left*/
+}
+.personName {
+    font-weight: bold;
+}
+.newPersonForm {
+    background-color: white;
+    color: black;
+    border: 2px solid var(--highlight-color);
+    border-radius: 1em;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+.newPersonFormFields {
+    display: flex;
+    flex-wrap: wrap;    
+}
+.newPersonForm input {
+    padding: 0.5em;
+    margin: 0.5em;
+    font-size: var(--text-size);
+    border: 1px solid grey;
+    border-radius: 1em;
+}
+.centredButtons {
+    text-align: center;
+}
+.newPersonForm button, .AddPersonButton {
+    background-color: var(--highlight-color);
+    color: white;
+    padding: 0.5em;
+    border-radius: 4em;
+    font-size: var(--text-size);
+}
+.newPersonForm button {
+    border: none; /* or 2px solid var(--feint-outline); if drop shadow doesn't work */
+    filter: drop-shadow(0px 0px 4px black); /* centred */
+    margin-top: 1em;
+}
+.AddPersonButton {
+    border: none;
+}
+.errorBar {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    background-color: gold;
+    color: black;
+    padding: 1em;
+    text-align: center;
+    font-size: larger;
+    font-weight: bold;
+}
+.clearError {
+    cursor: pointer;
+}
